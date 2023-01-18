@@ -11,7 +11,7 @@
             <ul class="list-group shadow">
                 {% for user in users|slice:":5" %}
                     <a href="{% url 'accounts:user_account' username=user.username %}">
-                        <li class="list-group-item bg-blackk"">
+                        <li class="list-group-item bg-blackk">
                             <div class="row" style="max-height: 200px">
                                 <div class="col-md-1">
                                     <img src="{{ user.profile.avatar.url }}" style="width: 100px; height: 100%; border-radius: 50%">

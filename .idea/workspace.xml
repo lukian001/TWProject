@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="329c5e5e-7c94-4d50-8051-10df86027bc2" name="Changes" comment="" />
+    <list default="true" id="329c5e5e-7c94-4d50-8051-10df86027bc2" name="Changes" comment="Initial commit">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/5K_Patience_PNG.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/5K_Patience_PNG_Fm2BBSE.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/5K_Patience_PNG_imFzDja.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/5K_Patience_PNG_vDl1Zt5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/Screenshot_2022-04-23_172831.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/Screenshot_2022-04-23_172831_CB9Do84.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/Screenshot_2022-04-23_172831_LKXDPWM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/Screenshot_2022-04-23_172831_lcj1WtF.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/abstract-magic-spiral-cropped.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/abstract-magic-spiral-cropped_aHAJVcu.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/bench.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/bench_gbE7LEL.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/blueflower.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/colorfall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/colorfall_KecPBt6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/colorfall_eNfSQNi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/flower.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/giphy.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/macos-monterey-wwdc-21-stock-dark-mode-5k-6016x6016-5585.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/minimalist-planets.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/normalizare_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/pexels-ivan-khmelyuk-7222009.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/pexels-ivan-khmelyuk-7222009_Mvga8Di.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/pexels-ivan-khmelyuk-7222009_d5FdwXS.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/true.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/true_U27tERO.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/true_u0KABpv.mp3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/search/templates/search_result.html" beforeDir="false" afterPath="$PROJECT_DIR$/search/templates/search_result.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,20 +49,22 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2KV0G7vV8dFL5jMzKa3n0bOuzJ2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="flattenPackages" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="TehnologiiWeb" type="Python.DjangoServer" factoryName="Django server">
       <module name="TehnologiiWeb" />
@@ -67,11 +100,23 @@
       <option name="presentableId" value="Default" />
       <updated>1674044344812</updated>
       <workItem from="1674044364326" duration="19000" />
-      <workItem from="1674044576468" duration="2374000" />
+      <workItem from="1674044576468" duration="4445000" />
     </task>
+    <task id="LOCAL-00001" summary="Initial commit">
+      <created>1674047682204</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1674047682204</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
   </component>
 </project>
