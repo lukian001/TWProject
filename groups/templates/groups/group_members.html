@@ -1,0 +1,115 @@
+{% extends 'base_layout.html' %}
+{% load tz %}
+
+{% block title %}
+    {{ group.name }} | CodeRu
+{% endblock %}
+
+{% block content %}
+    <div class="row content">
+        <div class="col-sm-12" style="background-color: #3e3e42; margin-top: 15px;margin-left: 15px; border-radius: 4px; overflow: auto; max-height: 910px">
+            <div style="border-radius: 4px; overflow-y: auto; word-break: normal;" class="col-sm-12">
+                <div class="container text-center">
+                    <div class="row content" style="align-items: center">
+                        <div style="border-radius: 4px; margin-top:50px;" class="col-sm-2 sidenav">
+                            <img id = "{{ group.name }}" src="{{ group.groupprofile.avatar.url }}" height="200px" style="border-radius: 50%">
+                            <div id="{{ group.name }}myModal" class="imgModal">
+                                <span id = "{{ group.name }}close" class="imgClose">&times;</span>
+                                <img style = "border-radius: 4px; max-height: 600px; max-width: 600px" class="imgModal-content" id="{{ group.name }}img01">
+                            </div>
+                            <script>
+                                $("#{{ group.name }}").click(function () {
+                                    const modal = document.getElementById("{{ group.name }}myModal");
+
+                                    const img = document.getElementById("{{ group.name }}");
+                                    const modalImg = document.getElementById("{{ group.name }}img01");
+                                    img.onclick = function(){
+                                        modal.style.display = "block";
+                                        modalImg.src = this.src;
+                                    }
+
+                                    const span = document.getElementById("{{ group.name }}close");
+
+                                    span.onclick = function() {
+                                        modal.style.display = "none";
+                                    }
+                                })
+                            </script>
+                        </div>
+                        <div style="border-radius: 4px; margin-top:50px; height:210px; padding: 60px 0; word-break: normal;" class="col-sm-10 sidenav">
+                            <h1 style="color: darkgray">{{ group.name }}</h1>
+                            <p style="color: darkgray">{{ group.groupprofile.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if is_admin %}
+                <div class="modal fade" id="changeGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Change group info</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form class="site-form" method="post" action="{% url 'groups:change_group' group_name=group.name %}" id="change-group-form" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ change_form }}
+                                </form>
+                                <form class="site-form" action="{% url 'groups:delete_group' group_name=group.name %}" method="post" id="delete-group-form">
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-light" data-mdb-ripple-color="dark" form="change-group-form">Change group</button>
+                                <button type="submit" class="btn btn-light" data-mdb-ripple-color="dark" form="delete-group-form">Delete group</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <hr style="color: white">
+            <form class = "site-form d-flex" method = "post" action = "{% url 'groups:enter_group' group_name=group.name %}" id = "enter-group">
+                {% csrf_token %}
+                {% if is_member %}
+                    <button type = "submit" class="btn btn-light" data-mdb-ripple-color="dark" form = "leave-group">Leave group</button>
+                    <button style="margin-left: 5px" type="submit" class="btn btn-light" data-mdb-ripple-color="dark" form="group-members">Group members</button>
+                {% else %}
+                    <button type = "submit" class="btn btn-light" data-mdb-ripple-color="dark" form = "enter-group">Enter group</button>
+                {% endif %}
+                {% if is_admin %}
+                    <button style="margin-left: 5px" type = "button" class="btn btn-light" data-mdb-ripple-color="dark" data-bs-toggle="modal" data-bs-target="#changeGroupModal">Change</button>
+                {% endif %}
+            </form>
+
+            <ul class="list-group shadow">
+                {% for user in members %}
+                    <a href="{% url 'accounts:user_account' username=user.username %}">
+                        <li class="list-group-item bg-blackk"">
+                            <div class="row" style="max-height: 200px">
+                                <div class="col-md-1">
+                                    <img src="{{ user.profile.avatar.url }}" style="width: 100px; height: 100%; border-radius: 50%">
+                                </div>
+                                <div class="col-md-10 justify-content-center">
+                                    <h1 class="mt-0 font-weight-bold mb-2" style="color: gray">
+                                        {{ user.get_full_name }}
+                                    </h1>
+                                    <h3 class="mt-0 font-weight-bold mb-2 text-muted" style="color: gray">
+                                        {{ user.groups.all.0.user_set.count }} friends
+                                    </h3>
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <form class = "site-form d-flex" method = "post" action = "{% url 'groups:leave_group' group_name=group.name %}" id = "leave-group">
+            {% csrf_token %}
+        </form>
+        <form class = "site-form d-flex" method = "post" action = "{% url 'groups:group_members' group_name=group.name %}" id = "group-members">
+            {% csrf_token %}
+        </form>
+    </div>
+{% endblock %}

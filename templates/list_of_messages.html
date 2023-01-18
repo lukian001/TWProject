@@ -1,0 +1,27 @@
+{% for message in messages %}
+    {% if message.sender.id == current %}
+        <li class="out">
+            <div class="chat-img">
+                <img alt="Avtar" src="{{ message.sender.profile.avatar.url }}">
+            </div>
+            <div class="chat-body">
+                <div class="chat-message">
+                    <h5>{{ message.sender.first_name }}</h5>
+                    <p>{{ message.text }}</p>
+                </div>
+            </div>
+        </li>
+    {% else %}
+        <li class="in">
+            <div class="chat-img">
+                <img alt="Avtar" src="{{ message.sender.profile.avatar.url }}">
+            </div>
+            <div class="chat-body">
+                <div class="chat-message">
+                    <h5>{{ message.sender.get_full_name }}</h5>
+                    <p>{{ message.text }}</p>
+                </div>
+            </div>
+        </li>
+    {% endif %}
+{%  endfor %}

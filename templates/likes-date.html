@@ -1,0 +1,5 @@
+{% load tz %}
+
+<p p class = "small"><small class="text-muted">
+    {{ post.date|timezone:"Europe/Bucharest" }} &nbsp; - &nbsp; {{ post.likes }} likes
+</small></p>

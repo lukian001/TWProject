@@ -1,0 +1,13 @@
+{% extends 'base_layout.html' %}
+
+{% block title %}
+    Post by {{ owner.get_full_name }}
+{% endblock %}
+
+{% block content %}
+    <div class = "post_content">
+        <h1> {{ owner.get_full_name }} wrote: </h1>
+        <p> {{ post.text }} </p>
+        <p> on {{ post.date }} </p>
+    </div>
+{% endblock %}

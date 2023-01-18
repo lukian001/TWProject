@@ -1,0 +1,590 @@
+{% load static %}
+
+<html lang="">
+    <head>
+        <meta charset = "utf-8">
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+
+        <link rel = "icon" href = "{% static 'logo.png' %}" type = "image/x-icon">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" {#  #}
+            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" {#  #}
+            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    </head>
+
+    <style>
+        body {
+            background-color: #252526;
+            overflow: hidden;
+        }
+
+        .bg-blackk {
+            background-color: #3e3e42;
+        }
+
+        #logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+        }
+
+        .navbar-brand {
+            padding: 14px 20px;
+            font-size: 16px;
+        }
+
+        .navbar-nav {
+            width: 100%;
+        }
+
+        .nav-item {
+            padding: 6px 14px;
+            text-align: center;
+        }
+
+        .nav-link {
+            padding-bottom: 10px;
+        }
+
+        .v-line {
+            background-color: gray;
+            width: 1px;
+            height: 20px;
+        }
+
+        .navbar-collapse.collapse.in {
+            display: block !important;
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                width: 100%;
+                text-align: left;
+            }
+
+            .v-line {
+                display: none;
+            }
+        }
+
+        .search{
+            margin-bottom: auto;
+            margin-top: 4px;
+            height: 35px;
+            background-color: #fff;
+            border-radius: 40px;
+            padding: 10px;
+        }
+
+        .search_input{
+            margin-top: -13px;
+            color: black;
+            border: 0;
+            outline: 0;
+            background: none;
+            width: 0;
+            caret-color:transparent;
+            line-height: 40px;
+            transition: width 0.4s linear;
+        }
+
+        .search .search_input{
+            padding: 0 10px;
+            width: 350px;
+            caret-color:red;
+            transition: width 0.4s linear;
+        }
+
+        .search:hover > .search_icon{
+            background: #007acc;
+            color: #fff;
+        }
+
+        .search_icon{
+            height: 15px;
+            width: 15px;
+            float: right;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color:white;
+            background-color:black;
+        }
+
+        a:link{
+            text-decoration:none;
+        }
+        .imgModal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          padding-top: 100px; /* Location of the box */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+        }
+        .imgModal-content {
+          margin: auto;
+          display: block;
+          width: 70%;
+          {#max-width: 800px;#}
+        }
+        .imgClose {
+          position: absolute;
+          top: 40px;
+          right: 35px;
+          color: #f1f1f1;
+          font-size: 40px;
+          font-weight: bold;
+          transition: 0.3s;
+        }
+        .imgClose:hover,
+        .imgClose:focus {
+          color: #bbb;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        @media only screen and (max-width: 700px){
+            .modal-content {
+                width: 100%;
+            }
+        }
+        .friend-list {
+            padding: 0;
+        }
+        .friend-list > li {
+            float: left;
+            width: 100%;
+        }
+        .friend-list > li > a {
+            display: block;
+            text-decoration: none;
+            color: #000;
+            padding: 0.625rem;
+            margin: 1px;
+            background: #fff;
+        }
+        .friend-list > li > a:after,
+        .friend-list > li > a:before {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .friend-list .friend-img {
+            float: left;
+            width: 3rem;
+            height: 3rem;
+            overflow: hidden;
+            background: #efeff4;
+        }
+
+        .friend-list .friend-info {
+            margin-left: 3.625rem;
+        }
+        .friend-list .friend-info h4 {
+            margin: 0.3125rem 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .friend-list .friend-info p {
+            color: #666;
+            margin: 0;
+        }
+
+        .site-form{
+            color:white;
+        }
+
+        .site-form label{
+            font-family:Monaco, monospace;
+            font-size: 0.8em;
+            margin-top:5px;
+        }
+
+        .site-form input, .site-form textarea{
+            font-family:Monaco, monospace;
+            font-size: 0.8em;
+            display:block;
+            margin: 10px 0 0 0;
+            padding: 5px;
+            border-radius:10px;
+        }
+
+        .helptext, helptext ul{
+            font-family:Monaco, monospace;
+            color: #bbb;
+            font-size:0.7em;
+            display:block;
+            margin:0 0 20px 0;
+        }
+
+        .errorlist li{
+            font-family:Monaco, monospace;
+            padding:10px;
+            color: red;
+            font-size:0.7em;
+            display:block;
+            margin:10px 0;
+        }
+
+        .errorlist{
+            padding: 0;
+        }
+
+
+        .site-form input[type="submit"]{
+            font-size: 0.8em;
+            font-family:Monaco, monospace;
+            border: 1px solid white;
+            color: white;
+            background-color:transparent;
+            border-radius:10px;
+        }
+
+        .bagpl{
+            padding: 0px;
+        }
+
+        .bagpl input, .bagpl textarea{
+            font-size: 0.8em;
+            font-family:Monaco, monospace;
+            margin: 10px 0 0 0;
+            padding: 5px;
+            border-radius:10px;
+        }
+
+        .bagpl label{
+            font-family:Monaco, monospace;
+            padding: 5px;
+            margin-left:10px;
+            color:white;
+            font-size: 0.8em;
+        }
+
+        .bagpl input[type="submit"]{
+            font-size: 0.8em;
+            font-family:Monaco, monospace;
+            border:0.5px solid;
+            border-color: white;
+            color: white;
+            background-color:transparent;
+            border-radius:10px;
+            margin-left: 25px;
+        }
+           .chat-list {
+            padding: 0;
+            font-size: .8rem;
+        }
+
+        .chat-list li {
+            margin-bottom: 10px;
+            overflow: auto;
+            color: #ffffff;
+        }
+
+        .chat-list .chat-img {
+            float: left;
+            width: 48px;
+        }
+
+        .chat-list .chat-img img {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            width: 100%;
+        }
+
+        .chat-list .chat-message {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            background: #5a99ee;
+            display: inline-block;
+            padding: 10px 20px;
+            position: relative;
+        }
+
+        .chat-list .chat-message:before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            width: 0;
+            height: 0;
+        }
+
+        .chat-list .chat-message h5 {
+            margin: 0 0 5px 0;
+            font-weight: 600;
+            line-height: 100%;
+            font-size: .9rem;
+        }
+
+        .chat-list .chat-message p {
+            line-height: 18px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-list .chat-body {
+            margin-left: 20px;
+            float: left;
+            width: 70%;
+        }
+
+        .chat-list .in .chat-message:before {
+            left: -12px;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid #5a99ee;
+        }
+
+        .chat-list .out .chat-img {
+            float: right;
+        }
+
+        .chat-list .out .chat-body {
+            float: right;
+            margin-right: 20px;
+            text-align: right;
+        }
+
+        .chat-list .out .chat-message {
+            background: #fc6d4c;
+        }
+
+        .chat-list .out .chat-message:before {
+            right: -12px;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #fc6d4c;
+        }
+
+        .card .card-header:first-child {
+            -webkit-border-radius: 0.3rem 0.3rem 0 0;
+            -moz-border-radius: 0.3rem 0.3rem 0 0;
+            border-radius: 0.3rem 0.3rem 0 0;
+        }
+        .card .card-header {
+            background: #17202b;
+            border: 0;
+            font-size: 1rem;
+            padding: .65rem 1rem;
+            position: relative;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+    </style>
+
+    <body>
+    <script>
+        var current_user_id = 0
+        var current_friend_id = 0
+    </script>
+        <div class="container-fluid px-0 sticky-top">
+            <nav class="navbar navbar-expand-sm navbar-dark py-0 px-0" style="background-color: #3e3e42">
+                <a class="navbar-brand" href="{% url 'homepage' %}">&nbsp;&nbsp;&nbsp;CodeRu</a>
+                <span class="v-line"></span>
+                <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Hi, {{ request.user.first_name }}!
+                                </a>
+                                <ul class="dropdown-menu bg-black" aria-labelledby="navbarDropdown">
+                                    <li><a style="color: gray" class="dropdown-item" href="{% url 'accounts:user_account' username=request.user.username %}">See profile</a></li>
+                                    <li><a style="color: gray" data-bs-toggle="offcanvas" href="#offcanvasExample"  class= "dropdown-item" role="button" aria-controls="offcanvasExample">Notifications</a></li>
+                                    <li><a style="color: gray" class="dropdown-item" href="{% url 'accounts:logout' %}">Log Out</a> </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                    <form class="search" method="post" action="{% url 'search:search'%}">
+                                        {% csrf_token %}
+                                    <input class="search_input" type="text" name="text" placeholder="Search here...">
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'project:project' %}">New project...</a>
+                            </li>
+                        {% else %}
+                            <form class = "bagpl" action = "{% url 'accounts:login' %}" method="post">
+
+                                {% csrf_token %}
+                                {{ user_form }}
+                                <input type = "submit" value = "Log In">
+                            </form>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="offcanvas offcanvas-start bg-black" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 style="color: gray" class="offcanvas-title" id="offcanvasExampleLabel">Notifications</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    {% if request.user.To.all.count > 0 %}
+                        <li class="list-group-item">
+                            {% for friend_request in request.user.To.all %}
+                                <div style="border-radius: 4px;word-break: normal;">
+                                    <img style="height: 40px; width:40px;margin:10px;" src="{{ friend_request.user_from.profile.avatar.url }}">
+                                    <a href="{% url 'accounts:user_account' username=friend_request.user_from.username %}">{{ friend_request.user_from.get_full_name }}</a>
+                                    <p style="display: inline">wants to be friends with you!</p>
+                                    <p style="margin-left:10px;"><br>How will you respond?</p>
+                                        <form id = "accept-friend-request" method="post" action="{% url 'accounts:accept_friend_request' request_id=friend_request.id %}">
+                                            {% csrf_token %}
+                                        </form>
+                                        <form id = "decline-friend-request" method="post" action="{% url 'accounts:decline_friend_request' request_id=friend_request.id %}">
+                                                {% csrf_token %}
+                                        </form>
+                                    <button form = "accept-friend-request" style="margin:10px;" type="submit" class="btn btn-success">Accept</button>
+                                    <button form = "decline-friend-request" style="margin:10px;" type="submit" class="btn btn-danger">Reject</button>
+                                </div>
+                            {% endfor %}
+                        </li>
+                    {% endif %}
+                    {% if request.user.notification_set.all.count > 0 %}
+                        <li class="list-group-item" style="border-radius: 4px; margin-bottom: 2px">
+                            {% for notification in request.user.notification_set.all %}
+                                <div style="border-radius: 4px;word-break: normal;">
+                                    <p style="display: inline">{{ notification.text }}</p>
+                                </div>
+                            {% endfor %}
+                        </li>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div style=" height: 92%;" class="row content">
+
+                <div class="col-sm-10 ms-auto">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+
+
+                {% if request.user.is_authenticated %}
+                    <div style="border-radius: 4px; height: 100%; word-break: normal; margin-top: 10px;" class="col-sm-2">
+                        <h2 style = "text-align: center; color: darkgray">Friends</h2>
+                        <ul class="friend-list clearfix" style="overflow: auto">
+                            {% for friend in request.user.groups.all.0.user_set.all %}
+                                {% if friend.username != request.user.username %}
+                                    <li style="border-radius: 4px">
+                                        <div class="friend-img" style="background-color: #252526"><img src="{{ friend.profile.avatar.url }}" alt="" style="max-width: 100%; border-radius: 50%;"/></div>
+                                        <div class="friend-info">
+                                        <a href="{% url 'accounts:user_account' username=friend.username %}" style="border-radius: 4px; background-color: #252526">
+                                            <h4 style="color: darkgray">{{ friend.get_full_name }}</h4>
+                                        </a>
+                                        <p id="{{ friend.id }}messages">See messages</p>
+                                            <script>
+                                                $("#{{ friend.id }}messages").on("click", function() {
+                                                    if (targetDiv.style.display !== "none") {
+                                                        targetDiv.style.display = "none";
+                                                    } else {
+                                                        targetDiv.style.display = "block";
+                                                    }
+                                                    $("#chatWithName").text("Chatting with {{ friend.get_full_name }}");
+                                                    current_user_id = "{{ request.user.id }}"
+                                                    current_friend_id = "{{ friend.id }}"
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        url: "{% url 'posts:get_messages' %}",
+                                                        data: { current: current_user_id,
+                                                                friend: current_friend_id,
+                                                        },
+                                                        dataType: "json",
+                                                        success: function (data) {
+                                                            $("#thisIsTheChat").html(data);
+                                                        }
+                                                    })
+                                                    $("#thisIsTheChat").scrollTop($("#thisIsTheChat").prop('scrollHeight'))
+                                                })
+                                            </script>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <h2 style = "text-align: center; color: darkgray">Projects</h2>
+                        <ul class="friend-list clearfix" style="overflow: auto">
+                            {% for project in request.user.project_set.all %}
+                                <li style="border-radius: 4px">
+                                    <a href="{% url 'project:det_project' slug=project.name %}" style="border-radius: 4px; background-color: #252526">
+                                        <h4 style="color: darkgray">{{ project.name }}</h4>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                        <div id="chatMessages" class="fixed-bottom" class="fixed-bottom" style="margin-bottom: 60px; width: 800px; display:none;">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="card">
+                                    <div class="card-header" id="chatWithName">Chat</div>
+                                    <div class="card-body height3">
+                                        <ul class="chat-list" id="thisIsTheChat" style="max-height: 600px; overflow: auto">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <form class="search" id="send_message">
+                                    <input class="search_input" style="width: 100%" type="text" id="comment_content">
+                                </form>
+                                <script>
+                                    $("#send_message").on('submit', function (e) {
+                                        e.preventDefault();
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: "{% url 'posts:send_message' %}",
+                                            data: { current: current_user_id,
+                                                    friend: current_friend_id,
+                                                    text: $("#comment_content").val()
+                                            },
+                                            dataType: "json",
+                                            success: function (data) {
+                                                $("#comment_content").val('')
+                                                $("#thisIsTheChat").append(data);
+                                                $("#thisIsTheChat").scrollTop($("#thisIsTheChat").prop('scrollHeight'))
+                                            }
+                                        })
+                                    })
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            <script>
+                const targetDiv = document.getElementById("chatMessages");
+                const btn = document.getElementById("bos");
+                btn.onclick = function () {
+                    if (targetDiv.style.display !== "none") {
+                        targetDiv.style.display = "none";
+                    } else {
+                        targetDiv.style.display = "block";
+                    }
+                    $("#thisIsTheChat").scrollTop($("#thisIsTheChat").prop('scrollHeight'))
+                };
+            </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,282 @@
+{% extends 'base_layout.html' %}
+{% load tz %}
+
+{% block title %}
+    {{ group.name }} | CodeRu
+{% endblock %}
+
+{% block content %}
+    <div class="row content">
+        <div class="col-sm-12" style="background-color: #3e3e42; margin-top: 15px;margin-left: 15px; border-radius: 4px; overflow: auto; max-height: 910px">
+            <div style="border-radius: 4px; overflow-y: auto; word-break: normal;" class="col-sm-12">
+                <div class="container text-center">
+                    <div class="row content" style="align-items: center">
+                        <div style="border-radius: 4px; margin-top:50px;" class="col-sm-2 sidenav">
+                            <img id = "{{ group.name }}" src="{{ group.groupprofile.avatar.url }}" height="200px" style="border-radius: 50%">
+                            <div id="{{ group.name }}myModal" class="imgModal">
+                                <span id = "{{ group.name }}close" class="imgClose">&times;</span>
+                                <img style = "border-radius: 4px; max-height: 600px; max-width: 600px" class="imgModal-content" id="{{ group.name }}img01">
+                            </div>
+                            <script>
+                                $("#{{ group.name }}").click(function () {
+                                    const modal = document.getElementById("{{ group.name }}myModal");
+
+                                    const img = document.getElementById("{{ group.name }}");
+                                    const modalImg = document.getElementById("{{ group.name }}img01");
+                                    img.onclick = function(){
+                                        modal.style.display = "block";
+                                        modalImg.src = this.src;
+                                    }
+
+                                    const span = document.getElementById("{{ group.name }}close");
+
+                                    span.onclick = function() {
+                                        modal.style.display = "none";
+                                    }
+                                })
+                            </script>
+                        </div>
+                        <div style="border-radius: 4px; margin-top:50px; height:210px; padding: 60px 0; word-break: normal;" class="col-sm-10 sidenav">
+                            <h1 style="color: darkgray">{{ group.name }}</h1>
+                            <p style="color: darkgray">{{ group.groupprofile.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if is_admin %}
+                <div class="modal fade" id="changeGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content bg-blackk">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Change group info</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form class="site-form" method="post" action="{% url 'groups:change_group' group_name=group.name %}" id="change-group-form" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ change_form }}
+                                </form>
+                                <form class="site-form" action="{% url 'groups:delete_group' group_name=group.name %}" method="post" id="delete-group-form">
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-light" data-mdb-ripple-color="dark" form="change-group-form">Change group</button>
+                                <button type="submit" class="btn btn-light" data-mdb-ripple-color="dark" form="delete-group-form">Delete group</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <hr style="color: white">
+            <form class = "site-form d-flex" method = "post" action = "{% url 'groups:enter_group' group_name=group.name %}" id = "enter-group">
+                {% csrf_token %}
+                {% if is_member %}
+                    <button type = "submit" class="btn btn-light" data-mdb-ripple-color="dark" form = "leave-group">Leave group</button>
+                    <button style="margin-left: 5px" type="submit" class="btn btn-light" data-mdb-ripple-color="dark" form="group-members">Group members</button>
+                {% else %}
+                    <button type = "submit" class="btn btn-light" data-mdb-ripple-color="dark" form = "enter-group">Enter group</button>
+                {% endif %}
+                {% if is_admin %}
+                    <button style="margin-left: 5px" type = "button" class="btn btn-light" data-mdb-ripple-color="dark" data-bs-toggle="modal" data-bs-target="#changeGroupModal">Change</button>
+                {% endif %}
+            </form>
+
+                        <ul class="list-group shadow">
+                {% for post in posts %}
+                    <li class="list-group-item bg-blackk">
+                        <div class="row" style="max-height: 200px">
+                                {% if post.type == 2 %}
+                                    <div class="col-md-2">
+                                        <video controls="controls" preload="preload"
+                                               style="height: auto; width: 210px; border-radius: 4px">
+                                            <source src="{{ post.media.url }}" type="video/mp4">
+                                        </video>
+                                    </div>
+                                {% endif %}
+                                {% if post.type == 3 %}
+                                    <div class="col-md-2">
+                                        <img id = "{{ post.slug }}" src="{{ post.media.url }}" style="width: 210px; height: 100%; border-radius: 4px">
+                                    </div>
+                                    <div id="{{ post.slug }}myModal" class="imgModal">
+                                        <span id = "{{ post.slug }}close" class="imgClose">&times;</span>
+                                        <img style = "border-radius: 4px" class="imgModal-content" id="{{ post.slug }}img01">
+                                    </div>
+                                    <script>
+                                        $("#{{  post.slug  }}").click(function () {
+                                            const modal = document.getElementById("{{ post.slug }}myModal");
+
+                                            const img = document.getElementById("{{ post.slug }}");
+                                            const modalImg = document.getElementById("{{ post.slug }}img01");
+                                            img.onclick = function(){
+                                                modal.style.display = "block";
+                                                modalImg.src = this.src;
+                                            }
+
+                                            const span = document.getElementById("{{ post.slug }}close");
+
+                                            span.onclick = function() {
+                                                modal.style.display = "none";
+                                            }
+                                        })
+                                    </script>
+                                {% endif %}
+                                <div class="col-md">
+                                    <h5 class="mt-0 font-weight-bold mb-2" style="color: gray">
+                                        <a style="color: gray" class = "text-gray" href="{% url 'accounts:user_account' username=post.owner.username %}">{{ post.owner.get_full_name }}</a>
+                                        posted{% if post.host_group.groupprofile.name == "Feed"%}:
+                                        {% else %} in <a style="color: darkgray" href="{% url "groups:group_page" group_name=post.host_group.name %}">{{ post.host_group.name }}</a>
+                                        {% endif %}
+                                    </h5>
+                                    <p></p>
+                                    <p class="font-italic mb-0" style="word-wrap: break-word; color: darkgray" id="{{ post.slug }}text">
+                                        {{ post.text|truncatechars:650 }}
+                                    </p>
+                                    <p></p>
+                                    <p p class = "small"><small class="text-muted">
+                                        {{ post.date|timezone:"Europe/Bucharest" }}
+                                    </small></p>
+                                </div>
+                                {% if post.type == 1%}
+                                    <audio controls="border" style="width: 100%">
+                                        <source src="{{ post.media.url }}">
+                                    </audio>
+                                {% endif %}
+                        </div>
+                    </li>
+                    <script>
+                    $("#{{ post.slug }}text").click(function () {
+                        $("#{{ post.slug }}post").modal("show");
+                    })
+                    </script>
+                    <div class="modal fade" id="{{ post.slug }}post"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="container-fluid" style="height:100%;">
+                                        <div style="height:100%;" class="row content">
+                                            {% if post.type > 1 %}
+                                                <div style="padding:10px;display: flex;justify-content: center;align-items: center;" class="col-sm-8">
+                                                    {% if post.type == 2 %}
+                                                        <video controls="controls" preload="preload"
+                                                               style="height: auto; width: 600px; border-radius: 4px">
+                                                            <source src="{{ post.media.url }}" type="video/mp4">
+                                                        </video>
+                                                    {% else %}
+                                                        <img id = "{{ post.slug }}" src="{{ post.media.url }}" style="width: 600px;border-radius: 4px">
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                            <div style="padding:10px;overflow-y:auto;word-break:break-word;" class="col-sm">
+                                                <h5 class="mt-0 font-weight-bold mb-2" style="color: gray">
+                                                    <a style="color: gray" class = "text-gray" href="{% url 'accounts:user_account' username=post.owner.username %}">{{ post.owner.get_full_name }}:</a>
+                                                </h5>
+                                                <p class="font-italic mb-0" style="word-wrap: break-word; color: black">
+                                                    {{ post.text }}
+                                                </p>
+                                                {% if post.type == 1 %}
+                                                    <audio controls="border" style="width: 100%">
+                                                        <source src="{{ post.media.url }}">
+                                                    </audio>
+                                                {% endif %}
+                                                <hr/>
+                                                <div id="{{ post.slug }}date-like-post">
+                                                    <p p class = "small"><small class="text-muted">
+                                                        {{ post.date|timezone:"Europe/Bucharest" }} &nbsp; - &nbsp; {{ post.likes }} likes
+                                                    </small></p>
+                                                </div>
+                                                <hr/>
+                                                <h4>Comments<br></h4>
+                                                <hr/>
+                                                <form id="{{ post.slug }}comments">
+                                                    <input id = "{{ post.slug }}comm" style="margin-top:10px;margin-bottom:20px;overflow-y:auto;" type="text" placeholder="Add a comment...">
+                                                    <button type="submit" style="float:none;" class="btn btn-primary">Post</button>
+                                                </form>
+                                                <hr/>
+                                                <div style="overflow: auto; max-height: 300px">
+                                                    <ul class="list-group list-group-flush" id="{{ post.slug }}comms">
+                                                        {% for comment in post.comment_set.all %}
+                                                            <li>
+                                                                <p><a style="color: gray" class = "text-gray" href="{% url 'accounts:user_account' username=comment.owner.username %}"> {{ comment.owner.get_full_name }} </a> posted:</p>
+                                                                {{ comment.text }}
+                                                                <p class = "small"><small class="text-muted">
+                                                                    {{ comment.date|timezone:"Europe/Bucharest" }}
+                                                                </small></p>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+
+                                                <script>
+                                                    $("#{{ post.slug }}comments").on('submit', function (e) {
+                                                        e.preventDefault();
+
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            url: "{% url 'posts:post_comment' %}",
+                                                            data: {
+                                                                comment : $('#{{ post.slug }}comm').val(),
+                                                                post_slug : "{{ post.slug }}"
+                                                            },
+                                                            dataType: "json",
+                                                            success: function (data) {
+                                                                $("#{{ post.slug }}comms").append(data);
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+
+                                                <div class="btn-group">
+                                                    <form id="{{ post.slug }}like">
+                                                    </form>
+                                                    <button id="{{ post.slug }}like_button" type="submit" class="btn btn-outline-primary btn-lg" form="{{ post.slug }}like">
+                                                        {% if post in request.user.profile.liked_posts.all %}
+                                                            Dislike
+                                                        {% else %}
+                                                            Like
+                                                        {% endif %}
+                                                    </button>
+                                                    <script>
+                                                        $("#{{ post.slug }}like").on('submit', function (e) {
+                                                            e.preventDefault();
+
+                                                            $.ajax({
+                                                                type: 'POST',
+                                                                url: "{% url 'posts:like_post' %}",
+                                                                data: {
+                                                                    post_slug: "{{ post.slug }}"
+                                                                },
+                                                                dataType: "json",
+                                                                success: function (data) {
+                                                                    $("#{{ post.slug }}date-like-post").html(data);
+                                                                    let button_text = $("#{{ post.slug }}like_button").text();
+                                                                    if(button_text.localeCompare("Like") == 0) {
+                                                                        $("#{{ post.slug }}like_button").text("Dislike");
+                                                                    } else {
+                                                                        $("#{{ post.slug }}like_button").text("Like");
+                                                                    }
+                                                                }
+                                                            })
+                                                        })
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <form class = "site-form d-flex" method = "post" action = "{% url 'groups:leave_group' group_name=group.name %}" id = "leave-group">
+            {% csrf_token %}
+        </form>
+        <form class = "site-form d-flex" method = "post" action = "{% url 'groups:group_members' group_name=group.name %}" id = "group-members">
+            {% csrf_token %}
+        </form>
+    </div>
+{% endblock %}

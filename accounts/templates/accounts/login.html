@@ -1,0 +1,14 @@
+{% extends 'base_layout.html' %}
+
+{% block content %}
+
+    <div class="col-lg-12">
+        <h2 style="color:white;font-family:Monaco, monospace;margin-top:15px;"> Create your own account</h2>
+        <form class = "site-form" action = "{% url 'accounts:signup' %}" method="post">
+            {% csrf_token %}
+            {{ signup_form }}
+            <input type = "submit" value = "Sign Up">
+        </form>
+    </div>
+
+{% endblock %}

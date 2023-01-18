@@ -1,0 +1,15 @@
+{% extends 'base_layout.html' %}
+
+    {% block title %}
+        <title>
+            Create group
+        </title>
+    {% endblock %}
+
+    {% block content %}
+        <form class = "site-form" action = "{% url 'groups:create_group' %}" method="post">
+            {% csrf_token %}
+            {{ create_form }}
+            <input type = "submit" value = "Create">
+        </form>
+    {% endblock %}
