@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Write Code</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        h2,h3{
+            font-family: Calibri;
+            color: white;
+            display: block;
+            margin-left: 10px;
+        }
+        .col-sm-3{
+            color: white;
+        }
+        .col-sm-8{
+            color: white;
+        }
+        .col-sm-1{
+            color: white;
+        }
+        .form-group {
+            float:left;
+        }
+    </style>
+</head>
+<body style="border:20px solid #322348; background: #322348;">
+  <div style="height: 100%;" class="d-flex align-items-left">
+    <div class="row">
+        <div style="height: 100%; " class="col-sm-2">
+            <a href="{% url 'homepage' %}">
+                <img class="mb-4" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1869px-Python-logo-notext.svg.png" alt="" width="80" height="80">
+            </a>
+            <h2>Python</h2>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">New file</button>
+            <hr>
+            <ul class="list-group" id="instance-list">
+                {% for instance in project.instance_set.all %}
+                    {% if instance.name == "main" %}
+                        <li id="{{ instance.name }}" onclick="change_file({{ instance.name }})" class="list-group-item active">{{ instance.name }}</li>
+                        <script>
+                            window.curr_selected_file = "{{ instance.name }}"
+                        </script>
+                    {% else %}
+                        <li id="{{ instance.name }}" onclick="change_file({{ instance.name }})" class="list-group-item">{{ instance.name }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div style="height: 100%; " class="col-sm-7">
+            <div>
+                <div class="form-group">
+                    <button id="button1id" name="button1id" class="btn btn-success" ng-click="submitRequest()">Run...</button>
+                </div>
+                <form class="form-group" style="margin-left: 5px" id="save_file">
+                    <input type="submit" value="Save..." class="btn btn-default">
+                </form>
+            </div>
+            <textarea id="code-area" rows="40" style="bottom:0px;border: 2px solid white;border-radius: 10px;color: white;background: black;width: 100%" class="container"></textarea>
+        </div>
+        <div class="col-sm-3">
+            <h3>Output</h3>
+            <textarea id = "console" readonly rows="10" style="bottom:0px;border: 2px solid white;border-radius: 10px;color: white;background: black;width: 100%" class="container"></textarea>
+        </div>
+  </div>
+  </div>
+</body>
+    <script>
+        $.ajax({
+           type:'POST',
+           url:"{% url 'project:instance_code' slug=project.name %}",
+           datatype: "json",
+           data: {
+                    instance_name: window.curr_selected_file,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+           success: function(data) {
+                document.getElementById('code-area').innerHTML = data
+           }
+        })
+        function change_file(e) {
+            let clicked_file = document.getElementById(e.textContent)
+            let current_file = document.getElementById(window.curr_selected_file)
+            current_file.classList.remove("active")
+            clicked_file.classList.add("active")
+            window.curr_selected_file = e.textContent
+            $.ajax({
+               type:'POST',
+               url:"{% url 'project:instance_code' slug=project.name %}",
+               datatype: "json",
+               data: {
+                        instance_name: window.curr_selected_file,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+               success: function(data) {
+                    document.getElementById('code-area').innerHTML = data
+               }
+            })
+        }
+
+        document.getElementById("button1id").onclick = function() {
+            let TextEntered = $("#code-area").val();
+            $.ajax({
+               type:'POST',
+               url:"{% url 'project:run_code' slug=project.name%}",
+               datatype: "json",
+               data: {
+                        code: TextEntered,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+               success: function(data) {
+                    document.getElementById('console').value = data.output;
+               }
+            })
+        };
+        $("#save_file").on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'project:save_code' slug=project.name %}",
+            data: {
+                instance_name: window.curr_selected_file,
+                instance_code: document.getElementById('code-area').value,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            dataType: "json",
+            success: function (data) {
+                alert("Content for file: " + window.curr_selected_file + " was saved!")
+            }
+        })
+    })
+    </script>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">New file</h4>
+        </div>
+        <div class="modal-body">
+          <label for="recipient-name" class="col-form-label">File name</label>
+            <input type="text" class="form-control" id="recipient-name">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <form id="create_new_file">
+              <input type="submit" class="btn btn-default" value="Create project">
+            </form>
+            <script>
+                $("#create_new_file").on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'project:create_file' slug=project.name %}",
+                        data: {
+                            new_file_name: document.getElementById('recipient-name').value,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            $("#instance-list").append(data)
+                        }
+                    })
+                })
+            </script>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</html>

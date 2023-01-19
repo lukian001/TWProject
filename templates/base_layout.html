@@ -10,12 +10,15 @@
 
         <link rel = "icon" href = "{% static 'logo.png' %}" type = "image/x-icon">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" {#  #}
             integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" {#  #}
             integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </head>
 
     <style>
@@ -417,11 +420,10 @@
                                 </form>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'project:project' %}">New project...</a>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">New Project</button>
                             </li>
                         {% else %}
                             <form class = "bagpl" action = "{% url 'accounts:login' %}" method="post">
-
                                 {% csrf_token %}
                                 {{ user_form }}
                                 <input type = "submit" value = "Log In">
@@ -524,7 +526,7 @@
                                 {% endif %}
                             {% endfor %}
                         </ul>
-                        <h2 style = "text-align: center; color: darkgray">Projects</h2>
+                        <h2 style = "text-align: center; color: darkgray">My Projects</h2>
                         <ul class="friend-list clearfix" style="overflow: auto">
                             {% for project in request.user.project_set.all %}
                                 <li style="border-radius: 4px">
@@ -587,4 +589,48 @@
             </script>
         </div>
     </body>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-blackk" style="color: white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Title</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          <form id="create_new_project">
+              <input type="submit" class="btn btn-outline-light my-2 my-sm-0" value="Create project">
+          </form>
+          <script>
+                $("#create_new_project").on('submit', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'project:project' %}",
+                        data: {
+                            project_name: document.getElementById('recipient-name').value,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            window.location.href = document.URL + 'project/' + data + '/'
+                        }
+                    })
+                })
+          </script>
+      </div>
+    </div>
+</div>
+</div>
 </html>

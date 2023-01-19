@@ -8,15 +8,10 @@
 {% block content %}
     <div class="row content">
         <div style="overflow-y: auto; border-radius: 4px; height: 100%; word-break: normal; margin-top: 10px" class="col-sm-2">
-            <h2 style = "text-align: center; color: darkgray">Groups</h2>
+            <h2 style = "text-align: center; color: darkgray">{{ user.username }}'s Projects</h2>
             <div class="list-group">
-                {% if request.user.username == user.username %}
-                    <a style="background-color: #3e3e42; color: darkgray" class="list-group-item list-group-item-action" type="button" data-bs-toggle="modal" data-bs-target="#createGroupModal">+ Create group</a>
-                {% endif %}
-                {% for group in user.groups.all %}
-                    {% if group.groupprofile.name != 'Feed' %}
-                        <a style="background-color: #3e3e42; color: darkgray" href="{% url 'groups:group_page' group_name=group.name %}" class="list-group-item list-group-item-action">{{ group.name }}</a>
-                    {% endif %}
+                {% for project in user.project_set.all %}
+                    <a style="background-color: #3e3e42; color: darkgray" href="{% url 'project:det_project' slug=project.name %}" class="list-group-item list-group-item-action">{{project.name}}</a>
                 {% endfor %}
             </div>
         </div>
